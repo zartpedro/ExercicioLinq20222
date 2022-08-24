@@ -34,18 +34,22 @@ namespace MoviesConsoleApp
             Console.WriteLine("5. Mostrar o nome e a data de nascimento do ator mais novo a atuar em um determinado gênero");
 
             Console.WriteLine();
-            Console.WriteLine("6. Mostrar o valor médio das avaliações dos filmes de um determinado ator diretor");
+            Console.WriteLine("6. Mostrar o valor médio das avaliações dos filmes de um determinado diretor");
 
             Console.WriteLine();
-            Console.WriteLine("7. Qual o elenco do filme pior avaliado ?");
+            Console.WriteLine("7. Qual o elenco do filme melhor avaliado ?");
 
             Console.WriteLine();
             Console.WriteLine("8. Qual o elenco do filme com o maior faturamento?");
 
+            Console.WriteLine();
+            Console.WriteLine("9. Gerar um relatório de aniversariantes, agrupando os atores pelo mês de aniverário.");
 
+            Console.WriteLine("- - -   feito!  - - - ");
+            Console.WriteLine();
         }
 
-            static void Main_presencial(String[] args)
+        static void Main_presencial(String[] args)
         {
             // acesso ao EF serah realizado pela variavel _db
             // essa dependencia da camada de apresentacao com
