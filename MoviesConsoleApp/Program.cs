@@ -19,22 +19,99 @@ namespace MoviesConsoleApp
             Console.WriteLine();
             Console.WriteLine("1. Listar o nome de todos personagens desempenhados por um determinado ator, incluindo a informação de qual o título do filme e o diretor");
 
+            //Query 1
+            Console.WriteLine("\n1.Listar o nome de todos personagens desempenhados por um determinado ator, incluindo a informação de qual o filme");
+
+                var consulta1 = mv_context.Characters
+                                       .Where(c => c.ActorId == 9)
+                                       .Select(c => new
+                                        {
+                                            c.Actor.Name,
+                                            c.Character,
+                                            c.Movie.Title
+                                            c.Movie.Director
+                                        });
+                       //
+                       foreach (var elem in consulta1)
+                       {
+                            Console.WriteLine("O ator {0} desempenhou o personagem {1} do filme {2}\n",
+                                                elem.Name, elem.Character, elem.Title, elem.Director);
+                        }
+
 
             Console.WriteLine();
             Console.WriteLine("2. Mostrar o nome e idade de todos atores que desempenharam um determinado personagem(por exemplo, quais os atores que já atuaram como '007' ?");
 
+            //Query 2
+            Console.WriteLine("\n 2 - Mostrar o nome de todos atores que desempenharam um determinado personagem");
+
+                  var query2 = from a in mv_context.Characters
+                    where a.Character == "James Bond"
+                    select new
+                                {
+                                   a.Movie.Title,
+                                   a.Actor.Name,
+                                   a.Actor.DateBirth,
+                                   a.Character
+                                };
+
+                    foreach (var ator in query2)
+                       {
+                        Console.WriteLine(" O ator {0} interpretou o persongem {1}", ator.Name, ator.Character);
+                       }
 
             Console.WriteLine();
+            //Query 3
             Console.WriteLine("3. Informar qual o ator desempenhou mais vezes um determinado personagem(por exemplo: qual o ator que realizou mais filmes como o 'agente 007'");
 
+                     var query3 = (from a in mv_context.Characters
+                        where a.Character == "Han Solo"
+                           group a by a.Actor.Name into grupo
+                           select new
+                                   {
+                                       Nome = grupo.Key,
+                                       QtdPersonagens = grupo.Count()
+                                   })
+                                 .OrderByDescending(a => a.QtdPersonagens)
+                                 .FirstOrDefault();
+
+                        Console.WriteLine("\n O ator {0} realizou {1} vezes o determinado personagem", query3.Nome, query3.QtdPersonagens);
             Console.WriteLine();
+            //Query 4
             Console.WriteLine("4. Mostrar o nome e a data de nascimento do ator mais idoso");
+                    var query4 = (from a in mv_context.Actors
+                          select a.DateBirth).Min();
 
+                           String atorMaisVelho = (from a in mv_context.Actors
+                                    where a.DateBirth == query4
+                                    select a.Name).FirstOrDefault();
+                           Console.WriteLine("\n O ator mais velho é o(a) {0} nascido(a) no dia {1}", atorMaisVelho, query4.ToShortDateString());
             Console.WriteLine();
+            //Query 5
             Console.WriteLine("5. Mostrar o nome e a data de nascimento do ator mais novo a atuar em um determinado gênero");
+            var query5 = (from a in mv_context.Actors
+                                         select a.DateBirth).Max();
 
+                        String atorMaisNovo = (from a in mv_context.Actors
+                                            where a.DateBirth == query5
+                                            select a.Name).FirstOrDefault();
+
+                        Console.WriteLine("\n O ator mais novo é o(a) {0} nascido(a) no dia {1}", atorMaisNovo, dataMaior.ToShortDateString());
             Console.WriteLine();
+
+            //Query 6
             Console.WriteLine("6. Mostrar o valor médio das avaliações dos filmes de um determinado diretor");
+
+
+                        String director = "Quentin Tarantino";
+                        var averageAvaliation = (from a in mv_context.Movies
+                                                 where a.Movie.Director == director
+                                                 select a.Movie.Rating).Average();
+
+                        Console.WriteLine(" O Diretor {0} obteve uma media de {1} em relação ao filme que dirigiu.", director, averageAvaliation.ToString("F"));
+
+
+                    }
 
             Console.WriteLine();
             Console.WriteLine("7. Qual o elenco do filme melhor avaliado ?");
